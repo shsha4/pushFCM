@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PushDAO">
+	<update id="pushInsert" parameterType="FcmDTO">
+		UPDATE c_user_info
+		SET
+			token_id = #{token_id},
+			use_push = #{use_push},
+			push_time = #{push_time}
+		WHERE
+			user_key = #{user_key}
+	</update>
+	
+	<select id="pushList" resultType="String">
+		SELECT IFNULL(MAX(token_id), 'null') AS token_id
+		FROM c_user_info
+		WHERE use_push = 1 and token_id IS NOT NULL and push_time = date_format(now(), '%H:%i')
+	</select>
+</mapper>
